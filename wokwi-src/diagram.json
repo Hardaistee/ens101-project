@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "author": "Gemini Assistant",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-arduino-uno", "id": "uno", "top": 105, "left": -140, "attrs": {} },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": -300.8,
+      "left": 140,
+      "attrs": { "pins": "i2c" }
+    },
+    { "type": "wokwi-membrane-keypad", "id": "keypad", "top": -155.6, "left": 149.6, "attrs": {} },
+    { "type": "wokwi-ir-receiver", "id": "ir", "top": 8.25, "left": 36.62, "attrs": {} },
+    { "type": "wokwi-ir-remote", "id": "remote", "top": -144, "left": 441.6, "attrs": {} },
+    { "type": "wokwi-buzzer", "id": "buzzer", "top": 12, "left": -55.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "uno:5V", "lcd:VCC", "red", [ "v0" ] ],
+    [ "uno:GND", "lcd:GND", "black", [ "v0" ] ],
+    [ "uno:A4", "lcd:SDA", "green", [ "v0" ] ],
+    [ "uno:A5", "lcd:SCL", "blue", [ "v0" ] ],
+    [ "uno:GND", "ir:GND", "black", [ "v0" ] ],
+    [ "uno:5V", "ir:VCC", "red", [ "v0" ] ],
+    [ "uno:11", "ir:DAT", "purple", [ "v0" ] ],
+    [ "keypad:R1", "uno:9", "green", [ "v0" ] ],
+    [ "keypad:R2", "uno:8", "green", [ "v0" ] ],
+    [ "keypad:R3", "uno:7", "green", [ "v0" ] ],
+    [ "keypad:R4", "uno:6", "green", [ "v0" ] ],
+    [ "keypad:C1", "uno:5", "blue", [ "v0" ] ],
+    [ "keypad:C2", "uno:4", "blue", [ "v0" ] ],
+    [ "keypad:C3", "uno:3", "blue", [ "v0" ] ],
+    [ "keypad:C4", "uno:2", "blue", [ "v0" ] ],
+    [ "buzzer:2", "uno:12", "orange", [ "v0" ] ],
+    [ "buzzer:1", "uno:GND", "black", [ "v0" ] ],
+    [ "buzzer:1", "uno:GND.1", "green", [ "v0" ] ],
+    [ "lcd:GND", "uno:GND.2", "black", [ "h0" ] ],
+    [ "ir:GND", "uno:GND.3", "black", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
