@@ -53,7 +53,7 @@ void loop() {
   char basilantus = tusTakimi.getKey();
   
   if (basilantus) {
-    manuelBip(1500, 50); // Kısa tuş sesi
+    manuelBip(1500, 50); 
     
     if(basilantus == '1') ekraniGuncelle("Durum:", "Toplantidayim");
     else if(basilantus == '2') ekraniGuncelle("Durum:", "Yemege Ciktim");
@@ -62,23 +62,23 @@ void loop() {
     else if(basilantus == '*') {
        manuelBip(2000, 100); 
        delay(100);
-       manuelBip(2000, 100); // İki kere bip (Kargo uyarısı)
+       manuelBip(2000, 100); 
        ekraniGuncelle("Ziyaretci Notu:", "Kargo Geldi");
        delay(2000); 
        ekraniGuncelle("Durum:", "Ofisteyim");
     }
   }
 
-  // --- IR KUMANDA ---
+
   if (irrecv.decode()) {
-    // Gelen sinyali serial'a yaz (test için)
+
     Serial.print("IR Kodu: ");
     Serial.println(irrecv.decodedIRData.decodedRawData, HEX);
 
-    // Tuşlara göre işlem
-    if (irrecv.decodedIRData.decodedRawData != 0) { // Parazit değilse
+
+    if (irrecv.decodedIRData.decodedRawData != 0) { 
       manuelBip(1200, 50);
-      // Wokwi Kumanda Kodları (1 ve 2 tuşları)
+  
       if (irrecv.decodedIRData.decodedRawData == 0xCF30FF00) ekraniGuncelle("Durum:", "Toplantidayim");
       if (irrecv.decodedIRData.decodedRawData == 0xE718FF00) ekraniGuncelle("Durum:", "Yemege Ciktim");
     }
@@ -94,8 +94,7 @@ void ekraniGuncelle(String s1, String s2) {
   lcd.print(s2);
 }
 
-// --- ÖZEL SES FONKSİYONU ---
-// tone() komutu IRremote ile çakıştığı için bunu kullanıyoruz.
+
 void manuelBip(int frekans, int sure) {
   long gecikme = 1000000 / frekans / 2;
   long dongu = frekans * sure / 1000;

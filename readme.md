@@ -440,17 +440,6 @@ void manuelBip(int frekans, int sure) {
 
 ---
 
-# POSTER CONTENT (For A1 Size)
-
-## PROBLEM DEFINITION
-
-**Office Communication Gap Issue:**
-- Visitors cannot get information when employee is not at desk
-- Uncertainty during meeting/lunch/external duty situations
-- Lack of accessibility for visually impaired visitors
-- Paper notes cannot be kept up-to-date
-
----
 
 ## PROJECT OBJECTIVE
 

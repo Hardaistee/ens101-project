@@ -19,8 +19,8 @@
 
 | **Team Member** | **Responsibilities** |
 |-----------------|---------------------|
-| **Hüseyin Arda Savcu** | Software Development, Arduino Coding, Timer Conflict Solution (manuelBip function), Testing & Debugging |
-| **Sarp Çalışkan** | Hardware Design, Wokwi Simulation Setup, Circuit Schematic (Tinkercad), Component Selection |
+| **Hüseyin Arda Savcu** | Software Development, Arduino Coding, Timer Conflict Solution (manuelBip function) |
+| **Sarp Çalışkan** | Hardware Design, Wokwi Simulation Setup, Circuit Schematic (Tinkercad), Component Selection, Testing & Debugging |
 | **Muhammed Taha Bayındır** | Documentation, Report Writing, Research, Poster Design, Project Planning |
 
 ---
@@ -440,17 +440,6 @@ void manuelBip(int frekans, int sure) {
 
 ---
 
-# POSTER CONTENT (For A1 Size)
-
-## PROBLEM DEFINITION
-
-**Office Communication Gap Issue:**
-- Visitors cannot get information when employee is not at desk
-- Uncertainty during meeting/lunch/external duty situations
-- Lack of accessibility for visually impaired visitors
-- Paper notes cannot be kept up-to-date
-
----
 
 ## PROJECT OBJECTIVE
 
