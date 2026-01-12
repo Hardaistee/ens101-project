@@ -286,11 +286,9 @@ This project was successfully developed and tested on the Wokwi simulator platfo
 #include <Keypad.h>
 #include <IRremote.h>
 
-// LCD Definition (I2C Address: 0x27, 16 columns, 2 rows)
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 16, 2); 
 const int BUZZER_PIN = 12;
 
-// Keypad Configuration (4x4 Matrix)
 const byte SATIR = 4; 
 const byte SUTUN = 4; 
 char tuslar[SATIR][SUTUN] = {
@@ -303,7 +301,6 @@ byte satirPinleri[SATIR] = {9, 8, 7, 6};
 byte sutunPinleri[SUTUN] = {5, 4, 3, 2}; 
 Keypad tusTakimi = Keypad(makeKeymap(tuslar), satirPinleri, sutunPinleri, SATIR, SUTUN);
 
-// IR Receiver Configuration
 int RECV_PIN = 11; 
 IRrecv irrecv(RECV_PIN);
 decode_results results;
@@ -312,77 +309,58 @@ void setup() {
   Serial.begin(9600);
   pinMode(BUZZER_PIN, OUTPUT);
   
-  // LCD Initialization
   lcd.init();
   lcd.backlight();
   
-  // Enable IR Receiver
   irrecv.enableIRIn(); 
-  
-  // Startup Message
+
   lcd.setCursor(0,0);
   lcd.print("System Active");
+  
   manuelBip(1000, 200); 
   delay(1000);
+  
   lcd.clear();
-  lcd.print("Status: In Office");
+  lcd.print("In Office");
 }
 
 void loop() {
-  // KEYPAD INPUT CHECK
   char basilantus = tusTakimi.getKey();
+  
   if (basilantus) {
-    manuelBip(1500, 50);  // Short confirmation beep
+    manuelBip(1500, 50); 
     
-    if(basilantus == '1') {
-      ekraniGuncelle("Status:", "In Meeting");
-    }
-    else if(basilantus == '2') {
-      ekraniGuncelle("Status:", "At Lunch");
-    }
-    else if(basilantus == '3') {
-      ekraniGuncelle("Status:", "Available");
-    }
+    if(basilantus == '1') ekraniGuncelle("Situation:", "In Meeting");
+    else if(basilantus == '2') ekraniGuncelle("Situation:", "Out for dinner");
+    else if(basilantus == '3') ekraniGuncelle("Situation:", "Available");
+    else if(basilantus == 'A') ekraniGuncelle("Please", "Wait");
     else if(basilantus == '*') {
-      // Visually Impaired Accessibility Mode
-      manuelBip(2000, 100);  // Long beep 1
-      delay(100);
-      manuelBip(2000, 100);  // Long beep 2
-      ekraniGuncelle("Visitor Note:", "Cargo Arrived");
-      delay(2000); 
-      ekraniGuncelle("Status:", "In Office");
+       manuelBip(2000, 100); 
+       delay(100);
+       manuelBip(2000, 100); 
+       ekraniGuncelle("Visitor Note:", "Package");
+       delay(2000); 
+       ekraniGuncelle("Situation", "In Office");
     }
   }
-  
-  // SERIAL PORT INPUT CHECK (Bluetooth Simulation)
-  if (Serial.available() > 0) {
-    String gelenVeri = Serial.readStringUntil('\n'); 
-    gelenVeri.trim();  // Clean whitespace
-    
-    if(gelenVeri.length() > 0) {
-      manuelBip(1500, 50);
-      ekraniGuncelle("Custom Message:", gelenVeri);
-    }
-  }
-  
-  // IR REMOTE CONTROL INPUT CHECK
+
+
   if (irrecv.decode()) {
-    if (irrecv.decodedIRData.decodedRawData != 0) {
+
+    Serial.print("IR Kodu: ");
+    Serial.println(irrecv.decodedIRData.decodedRawData, HEX);
+
+
+    if (irrecv.decodedIRData.decodedRawData != 0) { 
       manuelBip(1200, 50);
-      
-      // IR Command Codes
-      if (irrecv.decodedIRData.decodedRawData == 0xCF30FF00) {
-        ekraniGuncelle("Status:", "In Meeting");
-      }
-      if (irrecv.decodedIRData.decodedRawData == 0xE718FF00) {
-        ekraniGuncelle("Status:", "At Lunch");
-      }
+  
+      if (irrecv.decodedIRData.decodedRawData == 0xCF30FF00) ekraniGuncelle("Situation:", "In Meeting");
+      if (irrecv.decodedIRData.decodedRawData == 0xE718FF00) ekraniGuncelle("Situation:", "Out for dinner");
     }
-    irrecv.resume();  // Prepare to receive next signal
+    irrecv.resume(); 
   }
 }
 
-// LCD Screen Update Function
 void ekraniGuncelle(String s1, String s2) {
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -391,12 +369,10 @@ void ekraniGuncelle(String s1, String s2) {
   lcd.print(s2);
 }
 
-// Manual Beep Function (Timer Conflict Solution)
-// Does not use hardware Timer to avoid conflict with IRremote
+
 void manuelBip(int frekans, int sure) {
-  long gecikme = 1000000 / frekans / 2;       // Half period in microseconds
-  long dongu = frekans * sure / 1000;         // Total number of cycles
-  
+  long gecikme = 1000000 / frekans / 2;
+  long dongu = frekans * sure / 1000;
   for (long i = 0; i < dongu; i++) {
     digitalWrite(BUZZER_PIN, HIGH);
     delayMicroseconds(gecikme);
