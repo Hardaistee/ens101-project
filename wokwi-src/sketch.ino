@@ -3,11 +3,9 @@
 #include <Keypad.h>
 #include <IRremote.h>
 
-// --- AYARLAR ---
 LiquidCrystal_I2C lcd(0x27, 16, 2); 
 const int BUZZER_PIN = 12;
 
-// Keypad Ayarları
 const byte SATIR = 4; 
 const byte SUTUN = 4; 
 char tuslar[SATIR][SUTUN] = {
@@ -20,7 +18,6 @@ byte satirPinleri[SATIR] = {9, 8, 7, 6};
 byte sutunPinleri[SUTUN] = {5, 4, 3, 2}; 
 Keypad tusTakimi = Keypad(makeKeymap(tuslar), satirPinleri, sutunPinleri, SATIR, SUTUN);
 
-// IR Kumanda
 int RECV_PIN = 11; 
 IRrecv irrecv(RECV_PIN);
 decode_results results;
@@ -29,43 +26,38 @@ void setup() {
   Serial.begin(9600);
   pinMode(BUZZER_PIN, OUTPUT);
   
-  // LCD Başlat
   lcd.init();
   lcd.backlight();
   
-  // IR Başlat
   irrecv.enableIRIn(); 
 
-  // Açılış Testi
   lcd.setCursor(0,0);
-  lcd.print("Sistem Aktif");
+  lcd.print("System Active");
   
-  // Timer Çakışmasını önleyen özel bip fonksiyonu
   manuelBip(1000, 200); 
   delay(1000);
   
   lcd.clear();
-  lcd.print("Durum: Ofisteyim");
+  lcd.print("In Office");
 }
 
 void loop() {
-  // --- KEYPAD KONTROLÜ ---
   char basilantus = tusTakimi.getKey();
   
   if (basilantus) {
     manuelBip(1500, 50); 
     
-    if(basilantus == '1') ekraniGuncelle("Durum:", "Toplantidayim");
-    else if(basilantus == '2') ekraniGuncelle("Durum:", "Yemege Ciktim");
-    else if(basilantus == '3') ekraniGuncelle("Durum:", "Musaitim");
-    else if(basilantus == 'A') ekraniGuncelle("Lutfen", "Bekleyiniz");
+    if(basilantus == '1') ekraniGuncelle("Situation:", "In Meeting");
+    else if(basilantus == '2') ekraniGuncelle("Situation:", "Out for dinner");
+    else if(basilantus == '3') ekraniGuncelle("Situation:", "Available");
+    else if(basilantus == 'A') ekraniGuncelle("Please", "Wait");
     else if(basilantus == '*') {
        manuelBip(2000, 100); 
        delay(100);
        manuelBip(2000, 100); 
-       ekraniGuncelle("Ziyaretci Notu:", "Kargo Geldi");
+       ekraniGuncelle("Visitor Note:", "Package");
        delay(2000); 
-       ekraniGuncelle("Durum:", "Ofisteyim");
+       ekraniGuncelle("Situation", "In Office");
     }
   }
 
@@ -79,8 +71,8 @@ void loop() {
     if (irrecv.decodedIRData.decodedRawData != 0) { 
       manuelBip(1200, 50);
   
-      if (irrecv.decodedIRData.decodedRawData == 0xCF30FF00) ekraniGuncelle("Durum:", "Toplantidayim");
-      if (irrecv.decodedIRData.decodedRawData == 0xE718FF00) ekraniGuncelle("Durum:", "Yemege Ciktim");
+      if (irrecv.decodedIRData.decodedRawData == 0xCF30FF00) ekraniGuncelle("Situation:", "In Meeting");
+      if (irrecv.decodedIRData.decodedRawData == 0xE718FF00) ekraniGuncelle("Situation:", "Out for dinner");
     }
     irrecv.resume(); 
   }
